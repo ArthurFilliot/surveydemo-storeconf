@@ -1,0 +1,52 @@
+version: '2'
+
+networks:
+  cassandra-cluster:
+    driver: bridge
+
+services:
+  node1:
+    container_name: cassandra-node1
+    image: bitnami/cassandra:latest
+    volumes:
+      - /home/arthur/workspace_cassandra/compose/node1/persistence:/bitnami
+      - /home/arthur/workspace_cassandra/compose/node1/init-scripts:/docker-entrypoint-initdb.d
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_SEEDS=cassandra-node1,cassandra-node2,cassandra-node3,cassandra-node4
+    networks:
+      - cassandra-cluster
+    deploy:
+      resources:
+        limits:
+          memory: 2.5G
+
+  node2:
+    container_name: cassandra-node2
+    image: bitnami/cassandra:latest
+    volumes:
+      - /home/arthur/workspace_cassandra/compose/node2/persistence:/bitnami
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_SEEDS=cassandra-node1,cassandra-node2,cassandra-node3,cassandra-node4
+    networks:
+      - cassandra-cluster
+    deploy:
+      resources:
+        limits:
+          memory: 2.5G
+      
+  node3:
+    container_name: cassandra-node3
+    image: bitnami/cassandra:latest
+    volumes:
+      - /home/arthur/workspace_cassandra/compose/node3/persistence:/bitnami
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_SEEDS=cassandra-node1,cassandra-node2,cassandra-node3,cassandra-node4
+    networks:
+      - cassandra-cluster
+    deploy:
+      resources:
+        limits:
+          memory: 2.5G
